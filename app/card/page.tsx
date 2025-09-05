@@ -52,82 +52,93 @@ export default function CardPage() {
   }
 
   return (
-    <div className="flex gap-8 items-start w-full max-w-[1400px] mx-auto px-2">
-      <SidebarFilters />
-      
-      <main className="flex-1 flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="flex items-center gap-4 w-full">
-          <p className="text-2xl mr-auto">Total items: {TOTAL_CARS}</p>
-
-          <Select
-            className="max-w-xs"
-            label="Items per page"
-            selectedKeys={new Set([itemsPerPage])}
-            onSelectionChange={handleSelectChange}
-          >
-            {PAGE_SIZE_OPTIONS.map(size => (
-              <SelectItem key={size.toString()} textValue={size.toString()}>
-                {size}
-              </SelectItem>
-            ))}
-          </Select>
-
-          <Select
-            className="max-w-xs"
-            label="Sort by:"
-            selectedKeys={sortCategory}
-            onSelectionChange={handleSortChange}
-            placeholder="Select an option"
-          >
-            {SORT_OPTIONS.map(option => (
-              <SelectItem key={option.key} textValue={option.label}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </Select>
-        </div>
-
-        <div className="flex flex-wrap gap-4 justify-center">
-          {cars.map((car) => (
-            <Card key={car.id} className="py-4 max-w-md mx-auto">
-              <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                <h4 className="font-bold text-large">{car.brand}</h4>
-                <small className="text-default-500 truncate max-w-xs block">
-                  {car.model.length > 38 ? car.model.slice(0, 35) + "..." : car.model}
-                </small>
-              </CardHeader>
-              <CardBody className="overflow-visible py-2">
-                <Image
-                  alt={car.brand}
-                  className="object-cover rounded-xl"
-                  src={car.img_url}
-                  width={270}
-                />
-              </CardBody>
-              <CardFooter className="pb-0 pt-2 px-4 items-start cursor-pointer justify-between">
-                <Button
-                  showAnchorIcon
-                  as={Link}
-                  color="primary"
-                  href={`/card/${car.id}`}
-                  variant="solid"
-                  id={car.id}
-                >
-                  Learn more
-                </Button>
-                <p className="text-default-500 mt-2 text-small">{car.price} CR</p>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-
-        <Pagination
-          showControls
-          page={currentPage}
-          total={numPages}
-          onChange={setCurrentPage}
+    <div>
+      <div className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+        <h1 className="text-4xl font-bold text-gray-500">All cars</h1>
+        <Image
+          alt="HeroUI hero Image"
+          src="https://gamemag.ru/images/cache/News/News111784/a7f4e8a6e1-2_1390x600.jpg"
+          width={1000}
         />
-      </main>
+      </div>
+
+      <div className="flex gap-8 items-start w-full max-w-[1400px] mx-auto px-2">
+        <SidebarFilters />
+        
+        <main className="flex-1 flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+          <div className="flex items-center gap-4 w-full">
+            <p className="text-2xl mr-auto">Total items: {TOTAL_CARS}</p>
+
+            <Select
+              className="max-w-xs"
+              label="Items per page"
+              selectedKeys={new Set([itemsPerPage])}
+              onSelectionChange={handleSelectChange}
+            >
+              {PAGE_SIZE_OPTIONS.map(size => (
+                <SelectItem key={size.toString()} textValue={size.toString()}>
+                  {size}
+                </SelectItem>
+              ))}
+            </Select>
+
+            <Select
+              className="max-w-xs"
+              label="Sort by:"
+              selectedKeys={sortCategory}
+              onSelectionChange={handleSortChange}
+              placeholder="Select an option"
+            >
+              {SORT_OPTIONS.map(option => (
+                <SelectItem key={option.key} textValue={option.label}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            {cars.map((car) => (
+              <Card key={car.id} className="py-4 max-w-md mx-auto">
+                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                  <h4 className="font-bold text-large">{car.brand}</h4>
+                  <small className="text-default-500 truncate max-w-xs block">
+                    {car.model.length > 38 ? car.model.slice(0, 35) + "..." : car.model}
+                  </small>
+                </CardHeader>
+                <CardBody className="overflow-visible py-2">
+                  <Image
+                    alt={car.brand}
+                    className="object-cover rounded-xl"
+                    src={car.img_url}
+                    width={250}
+                  />
+                </CardBody>
+                <CardFooter className="pb-0 pt-2 px-4 items-start cursor-pointer justify-between">
+                  <Button
+                    showAnchorIcon
+                    as={Link}
+                    color="primary"
+                    href={`/card/${car.id}`}
+                    variant="solid"
+                    id={car.id}
+                  >
+                    Learn more
+                  </Button>
+                  <p className="text-default-500 mt-2 text-small">{car.price} CR</p>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+
+          <Pagination
+            showControls
+            page={currentPage}
+            total={numPages}
+            onChange={setCurrentPage}
+          />
+        </main>
+      </div>
     </div>
   );
 }
