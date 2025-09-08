@@ -52,7 +52,7 @@ export default function CarCard({ params: { id } }: any) {
           </div>
         </div>
         <div className="flex justify-end mt-4">
-          <Button as={Link} href="/card" color="danger">Back</Button>
+          <Button as={Link} href="/cars_list" color="danger">Back</Button>
         </div>
       </div>
     </div>

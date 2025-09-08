@@ -72,7 +72,7 @@ export const Navbar = () => {
               </NextLink>
             </NavbarItem>
           ))}
-          <NextLink href='/card'>Card</NextLink>
+          <NextLink href='/cars_list'>Cars List</NextLink>
         </ul>
       </NavbarContent>
 

@@ -15,7 +15,7 @@ export default function SidebarFilters() {
   const [selectedCarTypes, setSelectedCarTypes] = useState<string[]>([]);
   const [selectedCarDrivetrains, setSelectedCarDrivetrains] = useState<string[]>([]);
 
-  const [value, setValue] = useState([14500, 20000000]);
+  const [value, setValue] = useState([0, 10]);
 
   // Числовые фильтры
   const [price, setPrice] = useState({ min: "", max: "" });
@@ -115,22 +115,23 @@ export default function SidebarFilters() {
 
       {/* Числовые фильтры */}
       <div>
-        <div className="font-semibold text-base mb-2">Price</div>
+        <div className="font-semibold text-base mb-2">Price range</div>
 
-        <div className="flex flex-col gap-2 w-full h-full max-w-md items-start justify-center">
+        <div className="flex flex-col gap-2 w-full h-full max-w-md items-start justify-center mb-2">
           <Slider
             className="max-w-md"
             formatOptions={{style: "currency", currency: "USD"}}
-            label="Select a budget"
-            maxValue={100}
+            label="Select price"
+            maxValue={10}
             minValue={0}
             step={1}
             value={value}
             onChange={setValue}
           />
-          <p className="text-default-500 font-medium text-small">
+
+          {/* <p className="text-default-500 font-medium text-small">
             Selected budget: {Array.isArray(value) && value.map((b) => `${b}`).join(" – ")}
-          </p>
+          </p> */}
         </div>
 
         <div className="flex gap-2 mb-2">
