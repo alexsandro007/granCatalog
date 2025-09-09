@@ -22,10 +22,10 @@ export async function getCars(displayItems: number, page: number, sortKey: strin
       query = query.order('hp', { ascending: false });
       break;
     case "weight-asc":
-      query = query.order('weight', { ascending: true }).not('weight', 'is', null); // without null values
+      query = query.order('weight', { ascending: true }); // without null values (.not('weight', 'is', null))
       break;
     case "weight-desc":
-      query = query.order('weight', { ascending: false }).not('weight', 'is', null); // without null values
+      query = query.order('weight', { ascending: false }); // without null values, если будем использовать .not('weight', 'is', null) - фильтры работают некорректно(при выборе фильтра, последняя страница не грузится, но остальные работают(так как нету данных))
       break;
   }
 

@@ -1,19 +1,22 @@
+import { CAR_BRANDS } from "../constants/carBrands";
+import { CAR_TYPES } from "../constants/carTypes";
+import { CAR_DRIVE_TRAINS } from "../constants/carDriveTrains";
+
 import { useState } from "react";
 
 import {CheckboxGroup, Checkbox} from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 import { Divider } from "@heroui/divider";
-import { CAR_BRANDS } from "../constants/carBrands";
 import {Slider} from "@heroui/slider";
 import { Button } from "@heroui/button";
-import { CAR_TYPES } from "../constants/carTypes";
-import { CAR_DRIVE_TRAINS } from "../constants/carDriveTrains";
+import {Chip} from "@heroui/chip";
 
 export default function SidebarFilters() {
   const [search, setSearch] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<Set<string>>(new Set());
   const [selectedCarTypes, setSelectedCarTypes] = useState<string[]>([]);
   const [selectedCarDrivetrains, setSelectedCarDrivetrains] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const [value, setValue] = useState([0, 10]);
 
@@ -37,32 +40,64 @@ export default function SidebarFilters() {
   };
 
   return (
-    <aside className="top-8 min-w-[270px] max-w-[280px] bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-6 border border-zinc-200">
+    <aside className="min-w-[270px] max-w-[280px] bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-6 border border-zinc-200">
       <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
         Filter By <span>🎯</span>
       </h2>
 
+      {/* Выбранные фильтры */}
+      {selectedFilters.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="font-semibold text-base mb-2">Selected Filters</div>
+            <Button
+              color="danger"
+              radius="sm"
+              size="sm"
+              onClick={() => setSelectedFilters([])}
+              className="mb-2"
+            >
+              Clear all
+            </Button>
+          </div>
+          <Divider className="mb-2" />
+          <div className="flex flex-wrap gap-2">
+            {selectedFilters.map((filter) => (
+              <Chip key={filter} color="primary" radius="sm" variant="solid" onClose={() => setSelectedFilters(prev => prev.filter(f => f !== filter))}>
+                {filter.toUpperCase()}
+              </Chip>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Фильтр по бренду */}
       <div>
         <div className="font-semibold text-base mb-2">Car Brand</div>
+        <Divider className="mb-2" />
         <Input
           placeholder="Search brand..."
           value={search}
+          radius="sm"
           onChange={e => setSearch(e.target.value)}
           className="mb-2"
         />
-        <Divider className="mb-2" />
+
         <div className="max-h-60 overflow-y-auto flex flex-col gap-2">
-          {filteredBrands.map((brand) => (
-            <Checkbox
-              key={brand.key}
-              isSelected={selectedBrands.has(brand.key)}
-              onChange={() => handleToggle(brand.key)}
-              className="flex items-center gap-2"
-            >
-              <span>{brand.label} <span className="text-zinc-400">({brand.count})</span></span>
-            </Checkbox>
-          ))}
+          <CheckboxGroup
+            value={selectedFilters}
+            onValueChange={setSelectedFilters}
+          >
+            {filteredBrands.map((brand) => (
+              <Checkbox
+                key={brand.key}
+                value={brand.key}
+                className="flex items-center gap-2"
+              >
+                {brand.label}
+              </Checkbox>
+            ))}
+          </CheckboxGroup>
         </div>
       </div>
 
@@ -73,8 +108,8 @@ export default function SidebarFilters() {
 
         <div className="flex flex-col gap-2">
           <CheckboxGroup
-            value={selectedCarTypes}
-            onValueChange={setSelectedCarTypes}
+            value={selectedFilters}
+            onValueChange={setSelectedFilters}
           >
             {CAR_TYPES.map((carType) => (
               <Checkbox
@@ -87,7 +122,7 @@ export default function SidebarFilters() {
             ))}
           </CheckboxGroup>
         </div>
-        <p className="text-default-500 text-small">Selected: {selectedCarTypes.join(", ")}</p>
+        {/* <p className="text-default-500 text-small">Selected: {selectedCarTypes.join(", ")}</p> */}
       </div>
 
       {/* Фильтр по типу привода */}
@@ -96,8 +131,8 @@ export default function SidebarFilters() {
         <Divider className="mb-2" />
         <div className="flex flex-col gap-2">
           <CheckboxGroup
-            value={selectedCarDrivetrains}
-            onValueChange={setSelectedCarDrivetrains}
+            value={selectedFilters}
+            onValueChange={setSelectedFilters}
           >
             {CAR_DRIVE_TRAINS.map((dt) => (
               <Checkbox
@@ -110,7 +145,7 @@ export default function SidebarFilters() {
             ))}
           </CheckboxGroup>
         </div>
-        <p className="text-default-500 text-small">Selected: {selectedCarDrivetrains.join(", ")}</p>
+        {/* <p className="text-default-500 text-small">Selected: {selectedCarDrivetrains.join(", ")}</p> */}
       </div>
 
       {/* Числовые фильтры */}
@@ -126,7 +161,7 @@ export default function SidebarFilters() {
             minValue={0}
             step={1}
             value={value}
-            onChange={setValue}
+            // onChange={setValue}
           />
 
           {/* <p className="text-default-500 font-medium text-small">
@@ -202,9 +237,9 @@ export default function SidebarFilters() {
             onChange={e => setTorque(w => ({ ...w, max: e.target.value }))}
           />
         </div>
-
-        <Button className="mt-10 w-full" color="primary">Apply</Button>
       </div>
+
+      {/* <Button className="w-full" color="primary">Apply</Button> */}
     </aside>
   );
 }

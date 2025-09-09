@@ -22,8 +22,8 @@ export default function CarList() {
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <h1 className="text-4xl font-bold text-gray-500">All cars</h1>
+      <div className="flex flex-col items-center justify-center gap-4 pb-8 md:pb-10">
+        <h1 className="text-8xl font-bold text-gray-500 mb-4">Find your car →</h1>
         <Image
           alt="HeroUI hero Image"
           src="https://gamemag.ru/images/cache/News/News111784/a7f4e8a6e1-2_1390x600.jpg"
@@ -31,7 +31,7 @@ export default function CarList() {
         />
       </div>
 
-      <div className="flex gap-8 items-start w-full max-w-[1400px] mx-auto px-2">
+      <div className="flex gap-8 items-start w-full max-w-[1400px] mx-auto px-2 py-8 md:py-10">
         <SidebarFilters />
 
         <MainContent ref={mainContentRef} />

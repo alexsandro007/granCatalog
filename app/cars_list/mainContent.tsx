@@ -1,15 +1,18 @@
 'use client';
 import { useEffect, useState, forwardRef } from "react";
+
+import { PAGE_SIZE_OPTIONS } from "../constants/pagination";
+import { SORT_OPTIONS } from "../constants/sortOptions";
+
+import { getCars } from "../lib/getCars";
+
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Image } from "@heroui/image";
-import { getCars } from "../lib/getCars";
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";
 import { Select, SelectItem } from "@heroui/select";
-import { PAGE_SIZE_OPTIONS } from "../constants/pagination";
 import {Spinner} from "@heroui/spinner";
-import { SORT_OPTIONS } from "../constants/sortOptions";
 
 const TOTAL_CARS = 1270;
 
@@ -29,11 +32,11 @@ const MainContent = forwardRef<HTMLDivElement>((props, targetRef) => {
       .catch(console.error);
   }, [currentPage, itemsPerPage, sortCategory]);
 
-  // useEffect(() => {
-  //   if (targetRef && typeof targetRef !== "function" && targetRef.current) {
-  //     targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  //   }
-  // }, [currentPage, targetRef]);
+  useEffect(() => {
+    if (targetRef && typeof targetRef !== "function" && targetRef.current) {
+      targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [currentPage, targetRef]);
 
   const handleSelectChange = (keys: any) => {
     const value = keys instanceof Set ? Array.from(keys)[0] : String(keys);
@@ -59,7 +62,7 @@ const MainContent = forwardRef<HTMLDivElement>((props, targetRef) => {
   return (
     <main
       ref={targetRef}
-      className="flex-1 flex flex-col items-center justify-center gap-4 py-8 md:py-10"
+      className="flex-1 flex flex-col items-center justify-center gap-4"
     >
       <div className="flex items-center gap-4 w-full">
         <p className="text-2xl mr-auto">Total items: {TOTAL_CARS}</p>
