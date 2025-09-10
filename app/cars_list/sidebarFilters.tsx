@@ -1,23 +1,20 @@
+import { useState } from "react";
 import { CAR_BRANDS } from "../constants/carBrands";
 import { CAR_TYPES } from "../constants/carTypes";
 import { CAR_DRIVE_TRAINS } from "../constants/carDriveTrains";
-
-import { useState } from "react";
-
-import {CheckboxGroup, Checkbox} from "@heroui/checkbox";
+import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 import { Divider } from "@heroui/divider";
-import {Slider} from "@heroui/slider";
+import { Slider } from "@heroui/slider";
 import { Button } from "@heroui/button";
-import {Chip} from "@heroui/chip";
+import { Chip } from "@heroui/chip";
+import {NumberInput} from "@heroui/number-input";
 
 export default function SidebarFilters() {
   const [search, setSearch] = useState("");
-  const [selectedBrands, setSelectedBrands] = useState<Set<string>>(new Set());
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedCarTypes, setSelectedCarTypes] = useState<string[]>([]);
   const [selectedCarDrivetrains, setSelectedCarDrivetrains] = useState<string[]>([]);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-
   const [value, setValue] = useState([0, 10]);
 
   // Числовые фильтры
@@ -30,13 +27,38 @@ export default function SidebarFilters() {
     b.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleToggle = (key: string) => {
-    setSelectedBrands(prev => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
+  // Собираем все выбранные фильтры с лейблами
+  const selectedLabels = [
+    ...CAR_BRANDS.filter(b => selectedBrands.includes(b.key)).map(b => b.label),
+    ...CAR_TYPES.filter(t => selectedCarTypes.includes(t.key)).map(t => t.label),
+    ...CAR_DRIVE_TRAINS.filter(dt => selectedCarDrivetrains.includes(dt.key)).map(dt => dt.label),
+  ];
+
+  // Для снятия выбора фильтра по лейблу
+  const handleRemoveFilter = (label: string) => {
+    // Проверяем в каком массиве выбранных он есть и снимаем выбор
+    const brand = CAR_BRANDS.find(b => b.label === label);
+    if (brand && selectedBrands.includes(brand.key)) {
+      setSelectedBrands(selectedBrands.filter(k => k !== brand.key));
+      return;
+    }
+    const carType = CAR_TYPES.find(t => t.label === label);
+    if (carType && selectedCarTypes.includes(carType.key)) {
+      setSelectedCarTypes(selectedCarTypes.filter(k => k !== carType.key));
+      return;
+    }
+    const dt = CAR_DRIVE_TRAINS.find(dt => dt.label === label);
+    if (dt && selectedCarDrivetrains.includes(dt.key)) {
+      setSelectedCarDrivetrains(selectedCarDrivetrains.filter(k => k !== dt.key));
+      return;
+    }
+  };
+
+  // Для снятия всех выбранных фильтров
+  const handleClearAll = () => {
+    setSelectedBrands([]);
+    setSelectedCarTypes([]);
+    setSelectedCarDrivetrains([]);
   };
 
   return (
@@ -46,15 +68,15 @@ export default function SidebarFilters() {
       </h2>
 
       {/* Выбранные фильтры */}
-      {selectedFilters.length > 0 && (
+      {selectedLabels.length > 0 && (
         <div>
           <div className="flex items-center justify-between">
             <div className="font-semibold text-base mb-2">Selected Filters</div>
             <Button
-              color="danger"
+              color="primary"
               radius="sm"
               size="sm"
-              onClick={() => setSelectedFilters([])}
+              onClick={handleClearAll}
               className="mb-2"
             >
               Clear all
@@ -62,9 +84,15 @@ export default function SidebarFilters() {
           </div>
           <Divider className="mb-2" />
           <div className="flex flex-wrap gap-2">
-            {selectedFilters.map((filter) => (
-              <Chip key={filter} color="primary" radius="sm" variant="solid" onClose={() => setSelectedFilters(prev => prev.filter(f => f !== filter))}>
-                {filter.toUpperCase()}
+            {selectedLabels.map((filter) => (
+              <Chip
+                key={filter}
+                color="primary"
+                variant="flat"
+                radius="sm"
+                onClose={() => handleRemoveFilter(filter)}
+              >
+                {filter}
               </Chip>
             ))}
           </div>
@@ -83,10 +111,10 @@ export default function SidebarFilters() {
           className="mb-2"
         />
 
-        <div className="max-h-60 overflow-y-auto flex flex-col gap-2">
+        <div className="pl-1 max-h-60 overflow-y-auto flex flex-col gap-2">
           <CheckboxGroup
-            value={selectedFilters}
-            onValueChange={setSelectedFilters}
+            value={selectedBrands}
+            onValueChange={setSelectedBrands}
           >
             {filteredBrands.map((brand) => (
               <Checkbox
@@ -106,10 +134,10 @@ export default function SidebarFilters() {
         <div className="font-semibold text-base mb-2">Car Type</div>
         <Divider className="mb-2" />
 
-        <div className="flex flex-col gap-2">
+        <div className="pl-1 flex flex-col gap-2">
           <CheckboxGroup
-            value={selectedFilters}
-            onValueChange={setSelectedFilters}
+            value={selectedCarTypes}
+            onValueChange={setSelectedCarTypes}
           >
             {CAR_TYPES.map((carType) => (
               <Checkbox
@@ -122,17 +150,17 @@ export default function SidebarFilters() {
             ))}
           </CheckboxGroup>
         </div>
-        {/* <p className="text-default-500 text-small">Selected: {selectedCarTypes.join(", ")}</p> */}
       </div>
 
       {/* Фильтр по типу привода */}
       <div>
         <div className="font-semibold text-base mb-2">Drivetrain</div>
         <Divider className="mb-2" />
-        <div className="flex flex-col gap-2">
+
+        <div className="pl-1 flex flex-col gap-2">
           <CheckboxGroup
-            value={selectedFilters}
-            onValueChange={setSelectedFilters}
+            value={selectedCarDrivetrains}
+            onValueChange={setSelectedCarDrivetrains}
           >
             {CAR_DRIVE_TRAINS.map((dt) => (
               <Checkbox
@@ -145,7 +173,6 @@ export default function SidebarFilters() {
             ))}
           </CheckboxGroup>
         </div>
-        {/* <p className="text-default-500 text-small">Selected: {selectedCarDrivetrains.join(", ")}</p> */}
       </div>
 
       {/* Числовые фильтры */}
@@ -155,7 +182,7 @@ export default function SidebarFilters() {
         <div className="flex flex-col gap-2 w-full h-full max-w-md items-start justify-center mb-2">
           <Slider
             className="max-w-md"
-            formatOptions={{style: "currency", currency: "USD"}}
+            formatOptions={{ style: "currency", currency: "USD" }}
             label="Select price"
             maxValue={10}
             minValue={0}
@@ -163,10 +190,6 @@ export default function SidebarFilters() {
             value={value}
             // onChange={setValue}
           />
-
-          {/* <p className="text-default-500 font-medium text-small">
-            Selected budget: {Array.isArray(value) && value.map((b) => `${b}`).join(" – ")}
-          </p> */}
         </div>
 
         <div className="flex gap-2 mb-2">
@@ -220,7 +243,7 @@ export default function SidebarFilters() {
           />
         </div>
         <Divider className="mb-2" />
-        
+
         {/* Фильтр по моменту оборота */}
         <div className="font-semibold text-base mb-2">Torque (Nm)</div>
         <div className="flex gap-2">
@@ -235,6 +258,47 @@ export default function SidebarFilters() {
             type="number"
             value={torque.max}
             onChange={e => setTorque(w => ({ ...w, max: e.target.value }))}
+          />
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div className="flex flex-col gap-4">
+        <div className="flex w-full flex-wrap  mb-6 md:mb-0 gap-4">
+          <NumberInput
+            label="Price"
+            placeholder="0.00"
+            minValue={5000}
+            maxValue={20000000}
+            defaultValue={5000}
+            startContent={
+              <div className="pointer-events-none flex items-center">
+                <span className="text-default-400 text-small">CR</span>
+              </div>
+            }
+          />
+          <NumberInput
+            label="Price"
+            placeholder="0.00"
+            minValue={5000}
+            maxValue={20000000}
+            defaultValue={20000000}
+            startContent={
+              <div className="pointer-events-none flex items-center">
+                <span className="text-default-400 text-small">CR</span>
+              </div>
+            }
           />
         </div>
       </div>

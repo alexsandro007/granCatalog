@@ -69,6 +69,7 @@ const MainContent = forwardRef<HTMLDivElement>((props, targetRef) => {
 
         <Select
           className="max-w-xs"
+          color="primary"
           label="Items per page"
           selectedKeys={new Set([itemsPerPage])}
           onSelectionChange={handleSelectChange}
@@ -82,6 +83,7 @@ const MainContent = forwardRef<HTMLDivElement>((props, targetRef) => {
 
         <Select
           className="max-w-xs"
+          color="primary"
           label="Sort by"
           selectedKeys={sortCategory}
           onSelectionChange={handleSortChange}
