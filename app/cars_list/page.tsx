@@ -12,7 +12,7 @@ import {Spinner} from "@heroui/spinner";
 import SidebarFilters from "./sidebarFilters";
 import { SORT_OPTIONS } from "../constants/sortOptions";
 
-import MainContent from "./mainContent";
+import MainContent from "./mainContent/mainContent";
 import ScrollToTopButton from "./ScrollToTopButton";
 
 const TOTAL_CARS = 1270;
