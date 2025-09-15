@@ -59,7 +59,9 @@ export default function Controls({
         onSelectionChange={handleSortChange}
       >
         {SORT_OPTIONS.map(option => (
-          <SelectItem key={option.key}>{option.label}</SelectItem>
+          <SelectItem key={option.key} textValue={option.label}>
+            {option.label}
+          </SelectItem>
         ))}
       </Select>
     </div>

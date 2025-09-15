@@ -23,7 +23,7 @@ export default function CarList() {
   return (
     <div>
       <div className="flex flex-col items-center justify-center gap-4 pb-8 md:pb-10">
-        <h1 className="text-8xl font-bold text-gray-500 mb-4">Find your car →</h1>
+        <h1 className="text-8xl font-bold text-gray-500 mb-4">Find your car <span className="inline-block animate-bounce">→</span></h1>
         <Image
           alt="HeroUI hero Image"
           src="https://gamemag.ru/images/cache/News/News111784/a7f4e8a6e1-2_1390x600.jpg"
