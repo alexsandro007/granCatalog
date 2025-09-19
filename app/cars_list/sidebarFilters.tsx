@@ -9,8 +9,9 @@ import { Slider } from "@heroui/slider";
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import {NumberInput} from "@heroui/number-input";
+import { getCarsByBrands } from "../lib/getCarsByBrands";
 
-export default function SidebarFilters() {
+export default function SidebarFilters({ setCars }: { setCars: (cars: any[]) => void }) {
   const [search, setSearch] = useState("");
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedCarTypes, setSelectedCarTypes] = useState<string[]>([]);
@@ -59,6 +60,17 @@ export default function SidebarFilters() {
     setSelectedBrands([]);
     setSelectedCarTypes([]);
     setSelectedCarDrivetrains([]);
+  };
+
+  // Для применения выбранных фильтров
+  const handleApply = async () => {
+    try {
+      const result = await getCarsByBrands(selectedBrands);
+      setCars(result);
+      console.log("Cars:", result);
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
   };
 
   return (
@@ -303,7 +315,7 @@ export default function SidebarFilters() {
         </div>
       </div>
 
-      {/* <Button className="w-full" color="primary">Apply</Button> */}
+      <Button className="w-full" color="primary" onClick={handleApply}>Apply</Button>
     </aside>
   );
 }

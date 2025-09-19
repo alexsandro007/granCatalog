@@ -9,6 +9,7 @@ import CarsGrid from "./CarsGrid";
 import LoadingSpinner from "./LoadingSpinner";
 import { Pagination } from "@heroui/pagination";
 import { Car } from "@/types/Car";
+import SidebarFilters from "../sidebarFilters";
 
 const TOTAL_CARS = 1270;
 
@@ -37,26 +38,30 @@ const MainContent = forwardRef<HTMLDivElement>((props, targetRef) => {
   if (!cars.length) return <LoadingSpinner />;
 
   return (
-    <main ref={targetRef} className="flex-1 flex flex-col items-center gap-4">
-      <Controls
-        totalCars={TOTAL_CARS}
-        itemsPerPage={itemsPerPage}
-        sortCategory={sortCategory}
-        setItemsPerPage={setItemsPerPage}
-        setCurrentPage={setCurrentPage}
-        setSortCategory={setSortCategory}
-      />
+    <div className="flex gap-8 items-start w-full max-w-[1400px] mx-auto px-2 py-8 md:py-10">
+      <SidebarFilters setCars={setCars} />
 
-      <CarsGrid cars={cars} />
+      <main ref={targetRef} className="flex-1 flex flex-col items-center gap-4">
+        <Controls
+          totalCars={TOTAL_CARS}
+          itemsPerPage={itemsPerPage}
+          sortCategory={sortCategory}
+          setItemsPerPage={setItemsPerPage}
+          setCurrentPage={setCurrentPage}
+          setSortCategory={setSortCategory}
+        />
 
-      <Pagination
-        showControls
-        page={currentPage}
-        total={numPages}
-        onChange={setCurrentPage}
-        className="mt-1"
-      />
-    </main>
+        <CarsGrid cars={cars} />
+
+        <Pagination
+          showControls
+          page={currentPage}
+          total={numPages}
+          onChange={setCurrentPage}
+          className="mt-1"
+        />
+      </main>
+    </div>
   )
 });
 

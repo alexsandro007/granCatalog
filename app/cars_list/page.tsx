@@ -31,11 +31,7 @@ export default function CarList() {
         />
       </div>
 
-      <div className="flex gap-8 items-start w-full max-w-[1400px] mx-auto px-2 py-8 md:py-10">
-        <SidebarFilters />
-
-        <MainContent ref={mainContentRef} />
-      </div>
+      <MainContent ref={mainContentRef} />
 
       <ScrollToTopButton targetRef={mainContentRef} />
     </div>

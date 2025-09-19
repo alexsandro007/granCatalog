@@ -1,8 +1,8 @@
 export const CAR_BRANDS = [
-  { key: "acura", label: "Acura", count: 11 },
+  { key: "Acura", label: "Acura", count: 11 },
   { key: "alfa_romeo", label: "Alfa Romeo", count: 17 },
   { key: "amuse", label: "Amuse", count: 6 },
-  { key: "audi", label: "Audi", count: 0 },
+  { key: "Audi", label: "Audi", count: 0 },
   { key: "autobacs", label: "Autobacs", count: 0 },
   { key: "bmw", label: "BMW", count: 0 },
   { key: "cadillac", label: "Cadillac", count: 0 },
