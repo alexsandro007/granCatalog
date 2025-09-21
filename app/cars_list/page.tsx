@@ -9,7 +9,7 @@ import { Pagination } from "@heroui/pagination";
 import { Select, SelectItem } from "@heroui/select";
 import { PAGE_SIZE_OPTIONS } from "../constants/pagination";
 import {Spinner} from "@heroui/spinner";
-import SidebarFilters from "./sidebarFilters";
+import SidebarFilters from "./sidebarFilters/sidebarFilters";
 import { SORT_OPTIONS } from "../constants/sortOptions";
 
 import MainContent from "./mainContent/mainContent";

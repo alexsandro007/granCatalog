@@ -8,11 +8,21 @@ import {
   Cog,
   Bolt,
   Ratio,
+  Car as CarIcon,
+  Flag,
+  Wrench,
+  Diamond
 } from "lucide-react";
 
 interface CarCardProps {
   car: Car;
 }
+
+const carTypeIcons: Record<string, React.ElementType> = {
+  Street: CarIcon,
+  Race: Flag,
+  Tuned: Wrench,
+};
 
 export default function CarCard({ car }: CarCardProps) {
   return (
@@ -54,15 +64,22 @@ export default function CarCard({ car }: CarCardProps) {
             <Gauge className="w-5 h-5 text-gray-600" />
             <span>{car.torque ? car.torque : "-"} Нм</span>
           </div>
-          {/* Последний элемент - по центру всей сетки */}
           <div className="flex items-center gap-3 justify-center col-span-2">
             <Ratio className="w-5 h-5 text-gray-600" />
             <span>{car.w_kg ?? '-'}</span>
           </div>
+          {/* Тип машины */}
+          <div className="flex items-center gap-3 justify-center col-span-2 bg-gray-200 px-3 py-2 rounded-lg">
+            {(() => {
+              const Icon = carTypeIcons[car.car_type as keyof typeof carTypeIcons] || Diamond;
+              return <Icon className="w-5 h-5 text-gray-600" />;
+            })()}
+            <span>{car.car_type ?? '-'}</span>
+          </div>
         </div>
 
         {/* Цена */}
-        <div className="flex justify-center w-full mt-1">
+        <div className="flex justify-center w-full">
           <span className="w-full px-3 py-2 rounded-lg bg-primary text-white text-base font-semibold shadow-md text-center">
             {car.price ? `${car.price} CR` : "Цена не указана"}
           </span>

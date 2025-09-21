@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { CAR_BRANDS } from "../constants/carBrands";
-import { CAR_TYPES } from "../constants/carTypes";
-import { CAR_DRIVE_TRAINS } from "../constants/carDriveTrains";
+import { CAR_BRANDS } from "../../constants/carBrands";
+import { CAR_TYPES } from "../../constants/carTypes";
+import { CAR_DRIVE_TRAINS } from "../../constants/carDriveTrains";
 import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 import { Divider } from "@heroui/divider";
@@ -9,13 +9,28 @@ import { Slider } from "@heroui/slider";
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import {NumberInput} from "@heroui/number-input";
-import { getCarsByBrands } from "../lib/getCarsByBrands";
+import { getCarsByFilters } from "../../lib/getCarsByFilters";
+import RangeFilter from "./RangeFilter";
 
-export default function SidebarFilters({ setCars }: { setCars: (cars: any[]) => void }) {
+export default function SidebarFilters({
+  itemsPerPage,
+  currentPage,
+  setCars,
+  setTotalCars,
+  filters,
+  setFilters
+}: {
+  itemsPerPage: string;
+  currentPage: number;
+  setCars: (cars: any[]) => void;
+  setTotalCars: (count: number) => void;
+  filters: any;
+  setFilters: (filters: any) => void;
+}) {
   const [search, setSearch] = useState("");
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedCarTypes, setSelectedCarTypes] = useState<string[]>([]);
-  const [selectedCarDrivetrains, setSelectedCarDrivetrains] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(filters.brands);
+  const [selectedCarTypes, setSelectedCarTypes] = useState<string[]>(filters.carTypes);
+  const [selectedCarDrivetrains, setSelectedCarDrivetrains] = useState<string[]>(filters.driveTrains);
   const [value, setValue] = useState([0, 10]);
 
   // Числовые фильтры
@@ -63,14 +78,12 @@ export default function SidebarFilters({ setCars }: { setCars: (cars: any[]) => 
   };
 
   // Для применения выбранных фильтров
-  const handleApply = async () => {
-    try {
-      const result = await getCarsByBrands(selectedBrands);
-      setCars(result);
-      console.log("Cars:", result);
-    } catch (err) {
-      console.error("Error fetching cars:", err);
-    }
+  const handleApply = () => {
+    setFilters({
+      brands: selectedBrands,
+      carTypes: selectedCarTypes,
+      driveTrains: selectedCarDrivetrains,
+    });
   };
 
   return (
@@ -134,7 +147,7 @@ export default function SidebarFilters({ setCars }: { setCars: (cars: any[]) => 
                 value={brand.key}
                 className="flex items-center gap-2"
               >
-                {brand.label}
+                {brand.label}({brand.count})
               </Checkbox>
             ))}
           </CheckboxGroup>
@@ -314,6 +327,46 @@ export default function SidebarFilters({ setCars }: { setCars: (cars: any[]) => 
           />
         </div>
       </div>
+
+      <RangeFilter
+        label="Price"
+        unit="CR"
+        min={5000}
+        max={20000000}
+        step={1000}
+        value={price}
+        setValue={setPrice}
+      />
+
+      <RangeFilter
+        label="Weight"
+        unit="kg"
+        min={500}
+        max={3000}
+        step={50}
+        value={weight}
+        setValue={setWeight}
+      />
+
+      <RangeFilter
+        label="Power"
+        unit="hp"
+        min={50}
+        max={2000}
+        step={10}
+        value={power}
+        setValue={setPower}
+      />
+
+      <RangeFilter
+        label="Torque"
+        unit="Nm"
+        min={50}
+        max={2000}
+        step={10}
+        value={torque}
+        setValue={setTorque}
+      />
 
       <Button className="w-full" color="primary" onClick={handleApply}>Apply</Button>
     </aside>

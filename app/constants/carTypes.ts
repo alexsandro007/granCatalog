@@ -1,5 +1,5 @@
 export const CAR_TYPES = [
-     { key: "street", label: "Street" },
-     { key: "race", label: "Race" },
-     { key: "tuned", label: "Tuned" },
+     { key: "Street", label: "Street" },
+     { key: "Race", label: "Race" },
+     { key: "Tuned", label: "Tuned" },
 ];
